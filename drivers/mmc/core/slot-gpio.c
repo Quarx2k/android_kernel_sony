@@ -227,6 +227,13 @@ int mmc_gpio_request_ro(struct mmc_host *host, unsigned int gpio)
 }
 EXPORT_SYMBOL(mmc_gpio_request_ro);
 
+#ifdef CONFIG_TRAY_SHARED_INTERRUPT_DETECT
+static irqreturn_t mmc_gpio_cd_primary_irqt(int irq, void *dev_id)
+{
+	return IRQ_WAKE_THREAD;
+}
+#endif
+
 /**
  * mmc_gpio_request_cd - request a gpio for card-detection
  * @host: mmc host
@@ -255,7 +262,11 @@ int mmc_gpio_request_cd(struct mmc_host *host, unsigned int gpio)
 
 	ret = devm_gpio_request_one(&host->class_dev, gpio, GPIOF_DIR_IN,
 				    ctx->cd_label);
+#ifndef CONFIG_TRAY_SHARED_INTERRUPT_DETECT
 	if (ret < 0)
+#else
+	if (ret < 0 && ret != -EBUSY)
+#endif
 		/*
 		 * don't bother freeing memory. It might still get used by other
 		 * slot functions, in any case it will be freed, when the device
@@ -287,8 +298,13 @@ int mmc_gpio_request_cd(struct mmc_host *host, unsigned int gpio)
 
 	if (irq >= 0) {
 		ret = devm_request_threaded_irq(&host->class_dev, irq,
+#ifndef CONFIG_TRAY_SHARED_INTERRUPT_DETECT
 			NULL, mmc_gpio_cd_irqt,
 			IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+#else
+			mmc_gpio_cd_primary_irqt, mmc_gpio_cd_irqt,
+			IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_SHARED,
+#endif
 			ctx->cd_label, host);
 		if (ret < 0)
 			irq = ret;
