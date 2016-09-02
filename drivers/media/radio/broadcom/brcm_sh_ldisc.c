@@ -258,7 +258,7 @@ int parse_ldisc_snoop_enable_param(char *p_conf_name, char *p_conf_value)
 
 int parse_lpm_param(char *p_conf_name, char *p_conf_value)
 {
-    pr_info("%s = %s strlen = %d\n", p_conf_name, p_conf_value, strlen(p_conf_value));
+    pr_info("%s = %s strlen = %zd\n", p_conf_name, p_conf_value, strlen(p_conf_value));
     memset(lpm_param, 0, LPM_PARAM_SIZE);
     strncpy(lpm_param, p_conf_value, strlen(p_conf_value));
     pr_info("parse_lpm_param = %s\n", lpm_param);
@@ -637,7 +637,7 @@ static ssize_t store_bdaddr(struct device *dev,
 {
     sprintf(bd_addr, "%s\n", buf);
 
-    pr_info("store_bdaddr  %s  size %d",bd_addr,size);
+    pr_info("store_bdaddr  %s  size %zd",bd_addr,size);
     return size;
 }
 
@@ -652,7 +652,7 @@ static ssize_t store_fw_patchfile(struct device *dev,
         struct device_attribute *attr, char *buf,size_t size)
 {
     sprintf(fw_name, "%s",buf);
-    BT_LDISC_DBG(V4L2_DBG_INIT,"store_fw_patchfile  %s size %d ",fw_name,size);
+    BT_LDISC_DBG(V4L2_DBG_INIT,"store_fw_patchfile  %s size %zd ",fw_name,size);
     return size;
 }
 
@@ -2235,7 +2235,7 @@ static int brcm_hci_uart_init( void )
     static struct tty_ldisc_ops hci_uart_ldisc;
     int err;
 
-    BT_LDISC_DBG(V4L2_DBG_INIT, "HCI BRCM UART driver ver %s", VERSION);
+    BT_LDISC_DBG(V4L2_DBG_INIT, "HCI BRCM UART driver ver %s", "1.0");
 
     /* Register the tty discipline */
 
@@ -2409,12 +2409,19 @@ static int bcmbt_ldisc_remove(struct platform_device *pdev)
   * protocol driver or application performs open on FM v4l2 driver */
 /* Note: This entry is used in bt_hci_bdroid.c (Android source). Also present in
  *  brcm_sh_ldisc.c (v4l2_drivers) and board specific file (android kernel source) */
+
+static const struct of_device_id bcmbt_ldisc_dt_ids[] = {
+	{ .compatible = "bcmbt_ldisc"},
+	{}
+};
+
 static struct platform_driver bcmbt_ldisc_platform_driver = {
     .probe = bcmbt_ldisc_probe,
     .remove = bcmbt_ldisc_remove,
     .driver = {
            .name = "bcm_ldisc",
            .owner = THIS_MODULE,
+           .of_match_table = bcmbt_ldisc_dt_ids,
            },
 };
 

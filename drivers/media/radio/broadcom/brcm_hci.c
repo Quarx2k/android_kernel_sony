@@ -268,7 +268,7 @@ static int brcm_open(struct hci_uart *hu)
     hu->priv = brcm;
 
     BRCM_HCI_DBG(V4L2_DBG_INIT, "hu %p", hu);
-    BRCM_HCI_DBG(V4L2_DBG_INIT, "sizeof(hu->hdr_data) = %d", sizeof(hu->hdr_data));
+    BRCM_HCI_DBG(V4L2_DBG_INIT, "sizeof(hu->hdr_data) = %ld", sizeof(hu->hdr_data));
     return 0;
 }
 

@@ -41,7 +41,7 @@
 #endif
 
 #ifndef V4L2_FM_DEBUG
-#define V4L2_FM_DEBUG FALSE
+#define V4L2_FM_DEBUG TRUE
 #endif
 
 /* set this to FALSE to disable HCI snooping for production release */
