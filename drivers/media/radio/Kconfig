@@ -17,7 +17,6 @@ config RADIO_SI470X
 	depends on VIDEO_V4L2
 
 source "drivers/media/radio/si470x/Kconfig"
-source "drivers/media/radio/broadcom/Kconfig"
 
 config RADIO_SI476X
 	tristate "Silicon Laboratories Si476x I2C FM Radio"
