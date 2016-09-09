@@ -241,7 +241,7 @@
 
 	/* I2C : BLSP11 */
 	i2c@f9967000 {
-		qcom,clk-freq-out = <355000>;
+		qcom,clk-freq-out = <400000>;
 		pinctrl-0 = <&msm_gpio_83_act &msm_gpio_84_act>;
 		pinctrl-1 = <&msm_gpio_83_sus &msm_gpio_84_sus>;
 		status = "ok";
@@ -3315,7 +3315,7 @@
 
 &pmi8994_charger {
 	/delete-property/ qcom,parallel-usb-min-current-ma;
-	/delete-property/ qcom,parallel-9v-usb-min-current-ma;
+	/delete-property/ qcom,parallel-usb-9v-min-current-ma;
 	qcom,bmd-pin-src = "bpd_none";
 	qcom,usb_dp-vadc = <&pmi8994_vadc>;
 	qcom,usb_dm-vadc = <&pmi8994_vadc>;

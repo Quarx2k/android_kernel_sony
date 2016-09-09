@@ -1417,6 +1417,10 @@ static int mdss_dsi_post_panel_on(struct mdss_panel_data *pdata)
 		mdss_dsi_panel_cmds_send(ctrl, on_cmds);
 	}
 
+#ifdef CONFIG_SOMC_PANEL_INCELL
+	incell_driver_post_power_on(pdata);
+#endif
+
 	/* NOTE: Any debugging message must be shown from specific function. */
 	if (specific->panel_post_on) {
 		rc = specific->panel_post_on(pdata);
@@ -2057,7 +2061,7 @@ static int somc_panel_pa_v2_setup(struct mdss_panel_data *pdata)
 		pr_err("%s: Cannot configure picadj: %d\n",
 			__func__, ret);
 
-	pr_info("%s (%d):sat=%d hue=%d val=%d cont=%d",
+	pr_debug("%s (%d):sat=%d hue=%d val=%d cont=%d\n",
 		__func__, __LINE__, padata->global_sat_adj,
 		padata->global_hue_adj, padata->global_val_adj,
 		padata->global_cont_adj);
