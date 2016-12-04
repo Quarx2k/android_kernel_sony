@@ -70,18 +70,19 @@
 		status = "ok";
 	};
 
-	bluetooth_bcm: bcm4339 {
-		compatible = "bcm,bcm4339";
-		gpios = <&pm8941_gpios 16 0>, /* BT_REG_ON */
-			<&msmgpio 95 0>, /* BT_HOST_WAKE */
-			<&msmgpio 96 0>; /* BT_DEV_WAKE */
+	bcmbt_ldisc {
+		compatible = "bcmbt_ldisc";
+	};
+
+	bcm43xx {
+		compatible = "bcm,bcm43xx";
+		bcm,reg-on-gpio = <&pm8941_gpios 16 0>; /* BT_REG_ON */
 	};
 
 	bluesleep {
 		compatible = "qcom,bluesleep";
 		bt_host_wake = <&msmgpio 95 0>;
 		bt_ext_wake = <&msmgpio 96 0>;
-		bt_reg_on = <&pm8941_gpios 16 0>;
 		interrupt-parent = <&msmgpio>;
 		interrupts = <95 0>;
 		interrupt-names = "host_wake";
